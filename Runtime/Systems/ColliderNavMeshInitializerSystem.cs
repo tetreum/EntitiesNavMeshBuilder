@@ -2,7 +2,6 @@
 using EntitiesNavMeshBuilder.Utility;
 using Unity.Burst;
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.Physics;
 using Collider = Unity.Physics.Collider;
 
@@ -35,6 +34,7 @@ namespace EntitiesNavMeshBuilder.Systems
                 {
                     ref var data = ref SystemAPI.GetComponentRW<NavMeshSourceData>(e).ValueRW;
                     var collider = SystemAPI.GetComponent<PhysicsCollider>(e);
+                    var navMeshPart = SystemAPI.GetComponent<NavMeshPart>(e);
 
                     if (collider.ColliderPtr->Type is ColliderType.Compound)
                     {
@@ -47,6 +47,7 @@ namespace EntitiesNavMeshBuilder.Systems
                         {
                             ref var childAccessor = ref compound->Children[i];
                             var childData = GetData(childAccessor.Collider, out var posRot);
+                            childData.area = navMeshPart.area;
                             compoundBuffer.Add(new()
                             {
                                 value = childData,
@@ -58,6 +59,7 @@ namespace EntitiesNavMeshBuilder.Systems
                     else
                     {
                         data = GetData(collider.ColliderPtr, out _);
+                        data.area = navMeshPart.area;
                     }
                 }
             }

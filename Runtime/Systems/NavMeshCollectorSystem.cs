@@ -164,6 +164,7 @@ namespace EntitiesNavMeshBuilder.Systems
 
                         sourcesPtr[i] = new()
                         {
+                            area = data.area,
                             shape = data.shape,
                             transform = float4x4.TRS(ltw.Position, ltw.Rotation, new(1f, 1f, 1f)),
                             size = data.data
@@ -180,6 +181,7 @@ namespace EntitiesNavMeshBuilder.Systems
                         ref var ltw = ref ltwPtr[i];
                         var navMeshBuildSource = new NavMeshBuildSource
                         {
+                            area = data.area,
                             shape = data.shape,
                             transform = ltw.Value,
                         };
